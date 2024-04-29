@@ -3,7 +3,7 @@ import './App.css'
 function App() {
 
     return (
-        <>Hello World!</>
+        <img src="ME_Singles_City_Props_16x16_Shrub_2.png"></img>
     )
 }
 
