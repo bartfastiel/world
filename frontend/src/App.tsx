@@ -7,6 +7,7 @@ import {Tile} from "./Tile.ts";
 function App() {
 
     const [tiles, setTiles] = useState<Tile[]>([])
+    const [scoutY, setScoutY] = useState(0)
 
     useEffect(() => {
         axios.get('/api/tiles')
@@ -15,6 +16,21 @@ function App() {
             });
     }, [])
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "ArrowRight") {
+            setScoutY(y => y + 16)
+            event.preventDefault()
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
     return (
         <>
             {
@@ -22,7 +38,7 @@ function App() {
                     return <TileCard tile={tile}/>
                 })
             }
-            <TileCard tile={{x: 0, y: 0, type: "scout"}}/>
+            <TileCard tile={{x: 0, y: scoutY, type: "scout"}}/>
         </>
     )
 }
