@@ -12,6 +12,11 @@ const tileTypes: {[key in TileType]: {src: string, width: number, height: number
         width: 64,
         height: 64,
     },
+    "scout": {
+        src: "Scout.png",
+        width: 16,
+        height: 32,
+    },
 }
 
 type TileProps = {

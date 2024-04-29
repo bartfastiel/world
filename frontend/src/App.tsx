@@ -16,9 +16,14 @@ function App() {
     }, [])
 
     return (
-        tiles.map((tile) => {
-            return <TileCard tile={tile}/>
-        })
+        <>
+            {
+                tiles.map((tile) => {
+                    return <TileCard tile={tile}/>
+                })
+            }
+            <TileCard tile={{x: 0, y: 0, type: "scout"}}/>
+        </>
     )
 }
 
