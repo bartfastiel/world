@@ -1,19 +1,24 @@
 import './App.css'
-import Tile from "./Tile.tsx";
+import TileCard from "./TileCard.tsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {Tile} from "./Tile.ts";
 
 function App() {
 
+    const [tiles, setTiles] = useState<Tile[]>([])
+
+    useEffect(() => {
+        axios.get('/api/tiles')
+            .then((response) => {
+                setTiles(response.data)
+            });
+    }, [])
+
     return (
-        <>
-            {
-                Array.from({ length: 10 }, (_, i) => i).map((row) => {
-                    return Array.from({ length: 10 }, (_, i) => i).map((col) => {
-                        return <Tile x={row*16} y={col*16} type={"gras"}/>
-                    })
-                })
-            }
-            <Tile x={50} y={50} type={"tree"}/>
-        </>
+        tiles.map((tile) => {
+            return <TileCard tile={tile}/>
+        })
     )
 }
 

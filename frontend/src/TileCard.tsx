@@ -1,5 +1,7 @@
+import {Tile} from "./Tile.ts";
+import {TileType} from "./TileType.ts";
 
-const tileTypes = {
+const tileTypes: {[key in TileType]: {src: string, width: number, height: number}} = {
     "gras": {
         src: "ME_Singles_City_Props_16x16_Shrub_2.png",
         width: 16,
@@ -13,19 +15,17 @@ const tileTypes = {
 }
 
 type TileProps = {
-    y: number
-    x: number
-    type: keyof typeof tileTypes
+    tile: Tile
 }
 
-export default function Tile({y, x, type}: TileProps) {
+export default function TileCard({tile}: TileProps) {
 
-    const tileType = tileTypes[type]
+    const tileType = tileTypes[tile.type]
 
     return (
         <img src={tileType.src} className="tile" style={{
-            top: `${x}px`,
-            left: `${y}px`,
+            top: `${tile.x}px`,
+            left: `${tile.y}px`,
             width: `${tileType.width}px`,
             height: `${tileType.height}px`,
         }}></img>
