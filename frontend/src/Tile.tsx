@@ -1,15 +1,15 @@
 
 type TileProps = {
-    col: number
-    row: number
+    y: number
+    x: number
 }
 
-export default function Tile({col, row}: TileProps) {
+export default function Tile({y, x}: TileProps) {
 
     return (
         <img src="ME_Singles_City_Props_16x16_Shrub_2.png" className="tile" style={{
-            top: `${row * 16}px`,
-            left: `${col * 16}px`,
+            top: `${x}px`,
+            left: `${y}px`,
         }}></img>
     )
 }
