@@ -29,8 +29,8 @@ export default function TileCard({tile}: TileProps) {
 
     return (
         <img src={tileType.src} className="tile" style={{
-            top: `${tile.x}px`,
-            left: `${tile.y}px`,
+            top: `${tile.y}px`,
+            left: `${tile.x}px`,
             width: `${tileType.width}px`,
             height: `${tileType.height}px`,
         }}></img>
