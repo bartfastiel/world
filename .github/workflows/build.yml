@@ -31,4 +31,4 @@ jobs:
           distribution: 'temurin'
       - name: Build Java project
         working-directory: backend
-        run: mvn clean install
+        run: mvn clean install --batch-mode --no-transfer-progress
