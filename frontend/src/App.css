@@ -11,7 +11,7 @@
     left: calc(50% - 8px);
 }
 
-.map-wrapper {
+.map {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
@@ -20,6 +20,6 @@
     left: 0;
 }
 
-.map {
+.chunk {
     position: absolute;
 }

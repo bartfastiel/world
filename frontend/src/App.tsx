@@ -141,8 +141,8 @@ function App() {
     }, []);
 
     return (
-        <div className={"map-wrapper"}>
-            <div className={"map"} ref={mapRef}>
+        <div className={"map"}>
+            <div className={"chunk"} ref={mapRef}>
                 {
                     tiles.map((tile, i) => {
                         return <TileCard key={i} tile={tile}/>
