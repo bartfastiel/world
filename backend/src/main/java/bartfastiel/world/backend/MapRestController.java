@@ -1,6 +1,7 @@
 package bartfastiel.world.backend;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +12,12 @@ import java.util.List;
 @RequestMapping("/api/tiles")
 public class MapRestController {
 
-	@GetMapping
-	public List<Tile> getMap() {
+	@GetMapping("/{x}/{y}")
+	public List<Tile> getMap(@PathVariable int x, @PathVariable int y) {
 		var floor = new ArrayList<Tile>();
-		for (int x = 0; x < 10; x++) {
-			for (int y = 0; y < 10; y++) {
-				floor.add(new Tile(x * 16, y * 16, "gras"));
+		for (int tileX = 0; tileX < 10; tileX++) {
+			for (int tileY = 0; tileY < 10; tileY++) {
+				floor.add(new Tile(tileX * 16, tileY * 16, "gras"));
 			}
 		}
 		floor.add(new Tile(50, 50, "tree"));

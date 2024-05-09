@@ -1,3 +1,25 @@
 .tile {
     position: absolute;
 }
+
+.scout {
+    position: fixed;
+    overflow: hidden;
+    width: 16px;
+    height: 32px;
+    top: calc(50% - 16px);
+    left: calc(50% - 8px);
+}
+
+.map-wrapper {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.map {
+    position: absolute;
+}

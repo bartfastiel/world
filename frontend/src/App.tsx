@@ -49,6 +49,7 @@ function App() {
     const [crop, setCrop] = useState(scoutDirections.right)
     const setFrameCount = useState(0)[1]
 
+    const mapRef = useRef<HTMLDivElement>(null);
     const scoutRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -59,8 +60,8 @@ function App() {
     }, [])
 
     const handleKeyDown = (event: KeyboardEvent) => {
-        const scout = scoutRef.current;
-        if (!scout) {
+        const map = mapRef.current;
+        if (!map) {
             return;
         }
 
@@ -68,7 +69,7 @@ function App() {
         if (direction) {
             setMovement({
                 start: Date.now(),
-                startPosition: scout.getBoundingClientRect(),
+                startPosition: map.getBoundingClientRect(),
                 direction,
             })
             event.preventDefault()
@@ -92,14 +93,18 @@ function App() {
         const speed = 0.1;
         const distance = speed * timePassed;
         return {
-            x: movement.startPosition.x + distance * movement.direction.x,
-            y: movement.startPosition.y + distance * movement.direction.y,
+            x: movement.startPosition.x - distance * movement.direction.x,
+            y: movement.startPosition.y - distance * movement.direction.y,
         };
     }
 
     const moveScout = () => {
         const scout = scoutRef.current;
         if (!scout) {
+            return;
+        }
+        const map = mapRef.current;
+        if (!map) {
             return;
         }
         const distance = calculatePosition();
@@ -118,8 +123,8 @@ function App() {
             setCrop(scoutDirections.top);
         }
 
-        scout.style.left = `${distance.x}px`;
-        scout.style.top = `${distance.y}px`;
+        map.style.left = `${distance.x}px`;
+        map.style.top = `${distance.y}px`;
         setFrameCount((frameCount) => frameCount + 1);
     };
 
@@ -136,24 +141,21 @@ function App() {
     }, []);
 
     return (
-        <>
-            {
-                tiles.map((tile, i) => {
-                    return <TileCard key={i} tile={tile}/>
-                })
-            }
-            <div className="scout" ref={scoutRef} style={{
-                position: "absolute",
-                overflow: "hidden",
-                width: "16px",
-                height: "32px",
-            }}>
+        <div className={"map-wrapper"}>
+            <div className={"map"} ref={mapRef}>
+                {
+                    tiles.map((tile, i) => {
+                        return <TileCard key={i} tile={tile}/>
+                    })
+                }
+            </div>
+            <div className="scout" ref={scoutRef}>
                 <TileCard
                     tile={{x: 0, y: 0, type: "scout"}}
                     crop={crop}
                 />
             </div>
-        </>
+        </div>
     )
 }
 
