@@ -1,8 +1,7 @@
 import './App.css'
 import TileCard from "./TileCard.tsx";
 import {useEffect, useRef, useState} from "react";
-import axios from "axios";
-import {Tile} from "./Tile.ts";
+import ChunkCard from "./ChunkCard.tsx";
 
 const movements = {
     "ArrowRight": {x: 1, y: 0},
@@ -40,7 +39,6 @@ const scoutDirections = {
 
 function App() {
 
-    const [tiles, setTiles] = useState<Tile[]>([])
     const [movement, setMovement] = useState<{
         start: number,
         startPosition: DOMRect,
@@ -51,13 +49,6 @@ function App() {
 
     const mapRef = useRef<HTMLDivElement>(null);
     const scoutRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        axios.get('/api/tiles')
-            .then((response) => {
-                setTiles(response.data)
-            });
-    }, [])
 
     const handleKeyDown = (event: KeyboardEvent) => {
         const map = mapRef.current;
@@ -141,13 +132,12 @@ function App() {
     }, []);
 
     return (
-        <div className={"map"}>
-            <div className={"chunk"} ref={mapRef}>
-                {
-                    tiles.map((tile, i) => {
-                        return <TileCard key={i} tile={tile}/>
-                    })
-                }
+        <div className="screen">
+            <div className="map" ref={mapRef}>
+                <ChunkCard
+                    x={0}
+                    y={0}
+                />
             </div>
             <div className="scout" ref={scoutRef}>
                 <TileCard
