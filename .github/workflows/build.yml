@@ -5,7 +5,6 @@ on:
 
 jobs:
   build-frontend:
-    needs: build-backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,6 +20,7 @@ jobs:
         run: npm run build
 
   build-backend:
+    needs: build-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
