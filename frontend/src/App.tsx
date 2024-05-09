@@ -103,6 +103,9 @@ function App() {
             return;
         }
 
+        if(!movement) {
+            return;
+        }
         const direction = movement.direction;
         if (direction.x === 1) {
             setCrop(scoutDirections.right);
@@ -137,6 +140,18 @@ function App() {
                 <ChunkCard
                     x={0}
                     y={0}
+                />
+                <ChunkCard
+                    x={1}
+                    y={0}
+                />
+                <ChunkCard
+                    x={0}
+                    y={1}
+                />
+                <ChunkCard
+                    x={1}
+                    y={1}
                 />
             </div>
             <div className="scout" ref={scoutRef}>

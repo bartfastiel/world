@@ -20,14 +20,17 @@ export default function ChunkCard({x, y}: Props) {
     }, [])
 
     return (
-        <div className = {"chunk"}>
-        {
-            tiles.map((tile, i) => {
-                return <TileCard key = {i}
-                tile = {tile}
-                />
-            })
-        }
+        <div className="chunk" style={{
+            left: `${x * 160}px`,
+            top: `${y * 160}px`,
+        }}>
+            {
+                tiles.map((tile, i) => {
+                    return <TileCard key={i}
+                                     tile={tile}
+                    />
+                })
+            }
         </div>
-)
+    )
 }
