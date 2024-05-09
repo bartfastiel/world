@@ -11,6 +11,33 @@ const movements = {
     "ArrowDown": {x: 0, y: 1},
 } as const;
 
+const scoutDirections = {
+    "right": {
+        fromX: 0,
+        fromY: 0,
+        toX: 16,
+        toY: 32,
+    },
+    "top": {
+        fromX: 16,
+        fromY: 0,
+        toX: 32,
+        toY: 32,
+    },
+    "left": {
+        fromX: 32,
+        fromY: 0,
+        toX: 48,
+        toY: 32,
+    },
+    "bottom": {
+        fromX: 48,
+        fromY: 0,
+        toX: 64,
+        toY: 32,
+    },
+}
+
 function App() {
 
     const [tiles, setTiles] = useState<Tile[]>([])
@@ -19,6 +46,7 @@ function App() {
         startPosition: DOMRect,
         direction: { x: -1 | 0 | 1, y: -1 | 0 | 1 }
     }>()
+    const [crop, setCrop] = useState(scoutDirections.right)
     const setFrameCount = useState(0)[1]
 
     const scoutRef = useRef<HTMLDivElement>(null);
@@ -79,6 +107,17 @@ function App() {
             return;
         }
 
+        const direction = movement.direction;
+        if (direction.x === 1) {
+            setCrop(scoutDirections.right);
+        } else if (direction.x === -1) {
+            setCrop(scoutDirections.left);
+        } else if (direction.y === 1) {
+            setCrop(scoutDirections.bottom);
+        } else if (direction.y === -1) {
+            setCrop(scoutDirections.top);
+        }
+
         scout.style.left = `${distance.x}px`;
         scout.style.top = `${distance.y}px`;
         setFrameCount((frameCount) => frameCount + 1);
@@ -105,8 +144,14 @@ function App() {
             }
             <div className="scout" ref={scoutRef} style={{
                 position: "absolute",
+                overflow: "hidden",
+                width: "16px",
+                height: "32px",
             }}>
-                <TileCard tile={{x: 0, y: 0, type: "scout"}}/>
+                <TileCard
+                    tile={{x: 0, y: 0, type: "scout"}}
+                    crop={crop}
+                />
             </div>
         </>
     )

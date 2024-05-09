@@ -14,18 +14,38 @@ const tileTypes: {[key in TileType]: {src: string, width: number, height: number
     },
     "scout": {
         src: "Scout.png",
-        width: 16,
-        height: 32,
+        width: 927,
+        height: 656,
     },
 }
 
 type TileProps = {
     tile: Tile
+    crop?: {
+        fromX: number
+        fromY: number
+        toX: number
+        toY: number
+    }
 }
 
-export default function TileCard({tile}: TileProps) {
+export default function TileCard({tile, crop}: TileProps) {
 
     const tileType = tileTypes[tile.type]
+
+    if (crop) {
+        return (
+            <div className="tile" style={{
+                top: `${tile.y}px`,
+                left: `${tile.x}px`,
+                width: `${tileType.width}px`,
+                height: `${tileType.height}px`,
+                backgroundImage: `url(${tileType.src})`,
+                backgroundPosition: `-${crop.fromX}px -${crop.fromY}px`,
+            }}></div>
+        )
+
+    }
 
     return (
         <img src={tileType.src} className="tile" style={{
