@@ -19,6 +19,7 @@ function App() {
         startPosition: DOMRect,
         direction: { x: -1 | 0 | 1, y: -1 | 0 | 1 }
     }>()
+    const setFrameCount = useState(0)[1]
 
     const scoutRef = useRef<HTMLDivElement>(null);
 
@@ -80,17 +81,10 @@ function App() {
 
         scout.style.left = `${distance.x}px`;
         scout.style.top = `${distance.y}px`;
-
-        requestAnimationFrame(() => moveScout());
+        setFrameCount((frameCount) => frameCount + 1);
     };
 
-    useEffect(() => {
-        if (!movement) {
-            return;
-        }
-
-        requestAnimationFrame(() => moveScout());
-    }, [movement]);
+    requestAnimationFrame(() => moveScout());
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -105,8 +99,8 @@ function App() {
     return (
         <>
             {
-                tiles.map((tile) => {
-                    return <TileCard tile={tile}/>
+                tiles.map((tile, i) => {
+                    return <TileCard key={i} tile={tile}/>
                 })
             }
             <div className="scout" ref={scoutRef} style={{
