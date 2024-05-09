@@ -37,13 +37,19 @@ const scoutDirections = {
     },
 }
 
+type Movement = {
+    start: number,
+    startPosition: { x: number, y: number },
+    direction: { x: -1 | 0 | 1, y: -1 | 0 | 1 }
+};
+
 function App() {
 
-    const [movement, setMovement] = useState<{
-        start: number,
-        startPosition: DOMRect,
-        direction: { x: -1 | 0 | 1, y: -1 | 0 | 1 }
-    }>()
+    const [movement, setMovement] = useState<Movement>({
+        start: Date.now(),
+        startPosition: {x: 0, y: 0},
+        direction: {x: 0, y: 0},
+    })
     const [crop, setCrop] = useState(scoutDirections.right)
     const setFrameCount = useState(0)[1]
 
@@ -51,18 +57,18 @@ function App() {
     const scoutRef = useRef<HTMLDivElement>(null);
 
     const handleKeyDown = (event: KeyboardEvent) => {
-        const map = mapRef.current;
-        if (!map) {
-            return;
-        }
-
         const direction = movements[event.key as keyof typeof movements];
         if (direction) {
-            setMovement({
-                start: Date.now(),
-                startPosition: map.getBoundingClientRect(),
-                direction,
-            })
+            setMovement(oldMovement =>{
+                if (oldMovement.direction.x === direction.x && oldMovement.direction.y === direction.y) {
+                    return oldMovement;
+                }
+                return {
+                    start: Date.now(),
+                    startPosition: calculatePosition(oldMovement),
+                    direction,
+                };
+            });
             event.preventDefault()
         }
     };
@@ -70,22 +76,25 @@ function App() {
     const handleKeyUp = (event: KeyboardEvent) => {
         const direction = movements[event.key as keyof typeof movements];
         if (direction) {
-            setMovement(undefined);
+            setMovement(oldMovement => {
+                return {
+                    start: Date.now(),
+                    startPosition: calculatePosition(oldMovement),
+                    direction: {x: 0, y: 0},
+                }
+            });
             event.preventDefault()
         }
     };
 
-    function calculatePosition() {
-        if (!movement) {
-            return;
-        }
+    function calculatePosition(currentMovement: Movement) {
         const now = Date.now();
-        const timePassed = now - movement.start;
+        const timePassed = now - currentMovement.start;
         const speed = 0.1;
         const distance = speed * timePassed;
         return {
-            x: movement.startPosition.x - distance * movement.direction.x,
-            y: movement.startPosition.y - distance * movement.direction.y,
+            x: currentMovement.startPosition.x - distance * currentMovement.direction.x,
+            y: currentMovement.startPosition.y - distance * currentMovement.direction.y,
         };
     }
 
@@ -98,12 +107,12 @@ function App() {
         if (!map) {
             return;
         }
-        const distance = calculatePosition();
+        const distance = calculatePosition(movement);
         if (!distance) {
             return;
         }
 
-        if(!movement) {
+        if (!movement) {
             return;
         }
         const direction = movement.direction;
@@ -136,23 +145,13 @@ function App() {
 
     return (
         <div className="screen">
-            <div className="map" ref={mapRef}>
-                <ChunkCard
-                    x={0}
-                    y={0}
-                />
-                <ChunkCard
-                    x={1}
-                    y={0}
-                />
-                <ChunkCard
-                    x={0}
-                    y={1}
-                />
-                <ChunkCard
-                    x={1}
-                    y={1}
-                />
+            <div className="centerShock">
+                <div className="map" ref={mapRef}>
+                    <ChunkCard x={0} y={0}/>
+                    <ChunkCard x={1} y={0}/>
+                    <ChunkCard x={0} y={1}/>
+                    <ChunkCard x={1} y={1}/>
+                </div>
             </div>
             <div className="scout" ref={scoutRef}>
                 <TileCard
