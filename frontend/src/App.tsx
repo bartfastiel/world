@@ -37,9 +37,11 @@ const scoutDirections = {
     },
 }
 
+type ChunkCoordinate = { x: number, y: number };
+
 type Movement = {
     start: number,
-    startPosition: { x: number, y: number },
+    startPosition: ChunkCoordinate,
     direction: { x: -1 | 0 | 1, y: -1 | 0 | 1 }
 };
 
@@ -52,14 +54,30 @@ function App() {
     })
     const [crop, setCrop] = useState(scoutDirections.right)
     const setFrameCount = useState(0)[1]
+    const [chunkCoordinates, setChunkCoordinates] = useState<ChunkCoordinate[]>([])
 
     const mapRef = useRef<HTMLDivElement>(null);
     const scoutRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        const chunkCoordinates: ChunkCoordinate[] = [];
+        const chunksX = Math.ceil(window.innerWidth / 160);
+        const chunksY = Math.ceil(window.innerHeight / 160);
+        for (let x = 0; x < chunksX+1; x++) {
+            for (let y = 0; y < chunksY+1; y++) {
+                chunkCoordinates.push({
+                    x: x - Math.floor(chunksX / 2),
+                    y: y - Math.floor(chunksY / 2),
+                });
+            }
+        }
+        setChunkCoordinates(chunkCoordinates);
+    }, []);
+
     const handleKeyDown = (event: KeyboardEvent) => {
         const direction = movements[event.key as keyof typeof movements];
         if (direction) {
-            setMovement(oldMovement =>{
+            setMovement(oldMovement => {
                 if (oldMovement.direction.x === direction.x && oldMovement.direction.y === direction.y) {
                     return oldMovement;
                 }
@@ -147,10 +165,9 @@ function App() {
         <div className="screen">
             <div className="centerShock">
                 <div className="map" ref={mapRef}>
-                    <ChunkCard x={0} y={0}/>
-                    <ChunkCard x={1} y={0}/>
-                    <ChunkCard x={0} y={1}/>
-                    <ChunkCard x={1} y={1}/>
+                    {chunkCoordinates.map(
+                        (coordinates, i) => <ChunkCard key={i} x={coordinates.x} y={coordinates.y}/>
+                    )}
                 </div>
             </div>
             <div className="scout" ref={scoutRef}>
