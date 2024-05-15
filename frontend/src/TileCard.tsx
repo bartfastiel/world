@@ -12,6 +12,11 @@ const tileTypes: {[key in TileType]: {src: string, width: number, height: number
         width: 64,
         height: 64,
     },
+    "tent": {
+        src: "ME_Singles_Camping_16x16_Tent_1.png",
+        width: 64,
+        height: 64,
+    },
     "scout": {
         src: "Scout.png",
         width: 927,
